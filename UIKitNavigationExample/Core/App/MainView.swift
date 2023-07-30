@@ -18,59 +18,71 @@ struct MainView: ViewControllable {
     var body: some View {
         List {
             Button {
-                navigateToFeature_1()
+                _ = navigateToFeature_1()
             } label: {
                 Text("Navigate to Feature 1")
             }
             
             Button {
-                navigateToFeature_2()
+                _ = navigateToFeature_2()
             } label: {
                 Text("Navigate to Feature 2")
             }
             
             Button {
-                presentFeature_2()
+                _ = presentFeature_2()
             } label: {
                 Text("Present Feature 2")
             }
             
             Button {
-                fullScreenFeature_3()
+                _ = fullScreenFeature_3()
             } label: {
                 Text("Full Screen Feature 3")
             }
         }
     }
+}
+
+extension MainView {
+    func viewDidAppear(_ viewController: UIViewController) {
+        viewController.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+}
     
-    func navigateToFeature_1() {
-        guard let viewController = holder.viewController else { return }
+extension MainView {
+    func navigateToFeature_1() -> Bool {
+        guard let viewController = holder.viewController else { return false }
         let view = Feature_1_View()
-        
-        // enable pop gesture when navigation bar is hidden.
-        viewController.navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        
         viewController.navigationController?.pushViewController(view.viewController, animated: true)
+        
+        return true
     }
     
-    func navigateToFeature_2() {
-        guard let viewController = holder.viewController else { return }
+    func navigateToFeature_2() -> Bool {
+        guard let viewController = holder.viewController else { return false }
         let view = Feature_2_View()
         viewController.navigationController?.pushViewController(view.viewController, animated: true)
+        
+        return true
     }
     
-    func presentFeature_2() {
-        guard let viewController = holder.viewController else { return }
+    func presentFeature_2() -> Bool {
+        guard let viewController = holder.viewController else { return false }
         let view = Feature_2_View()
         viewController.present(view.viewController, animated: true)
+        
+        return true
     }
     
-    func fullScreenFeature_3() {
-        guard let viewController = holder.viewController else { return }
+    func fullScreenFeature_3() -> Bool {
+        guard let viewController = holder.viewController else { return false }
         let view = Feature_3_View()
         let nextViewController = view.viewController
         nextViewController.modalPresentationStyle = .fullScreen
         nextViewController.modalTransitionStyle = .crossDissolve
         viewController.present(nextViewController, animated: true)
+        
+        return true
     }
 }

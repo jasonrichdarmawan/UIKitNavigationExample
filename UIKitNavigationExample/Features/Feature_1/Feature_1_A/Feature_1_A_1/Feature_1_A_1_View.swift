@@ -15,31 +15,22 @@ struct Feature_1_A_1_View: ViewControllable {
         print("\(type(of: self)) \(#function)")
     }
     
-    func viewWillAppear(_ viewController: UIViewController) {
-        viewController.navigationController?.setNavigationBarHidden(true, animated: false)
-        
-        print("\(type(of: self)) \(#function)")
-    }
-    
-    func viewWillDisappear(_ viewController: UIViewController) {
-        viewController.navigationController?.setNavigationBarHidden(false, animated: false)
-        
-        print("\(type(of: self)) \(#function)")
-    }
-    
     var body: some View {
         VStack {
             Text("Feature 1 A 1")
             Button {
-                navigateToRoot()
+                _ = navigateToRoot()
             } label: {
                 Text("simulate exit")
             }
         }
     }
-    
-    func navigateToRoot() {
-        guard let viewControlelr = holder.viewController else { return }
+}
+
+extension Feature_1_A_1_View {
+    func navigateToRoot() -> Bool {
+        guard let viewControlelr = holder.viewController else { return false }
         viewControlelr.navigationController?.popToRootViewController(animated: true)
+        return true
     }
 }

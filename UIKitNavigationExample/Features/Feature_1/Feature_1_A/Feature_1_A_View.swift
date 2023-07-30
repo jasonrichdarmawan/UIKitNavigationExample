@@ -24,18 +24,6 @@ struct Feature_1_A_View: ViewControllable {
         print("\(type(of: self)) \(#function)")
     }
     
-    func viewWillAppear(_ viewController: UIViewController) {
-        viewController.navigationController?.setNavigationBarHidden(true, animated: false)
-        
-        print("\(type(of: self)) \(#function)")
-    }
-    
-    func viewWillDisappear(_ viewController: UIViewController) {
-        viewController.navigationController?.setNavigationBarHidden(false, animated: false)
-        
-        print("\(type(of: self)) \(#function)")
-    }
-    
     var body: some View {
         VStack {
             Text("Feature 1 A")
@@ -47,16 +35,18 @@ struct Feature_1_A_View: ViewControllable {
                 Text("set current station")
             }
             Button {
-                navigateToFeature_1_A_1()
+                _ = navigateToFeature_1_A_1()
             } label: {
                 Text("Go to Feature 1 A 1")
             }
         }
     }
     
-    func navigateToFeature_1_A_1() {
-        guard let viewController = holder.viewController else { return }
+    func navigateToFeature_1_A_1() -> Bool {
+        guard let viewController = holder.viewController else { return false }
         let view = Feature_1_A_1_View()
         viewController.navigationController?.pushViewController(view.viewController, animated: true)
+        
+        return true
     }
 }

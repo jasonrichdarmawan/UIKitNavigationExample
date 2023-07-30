@@ -8,16 +8,16 @@
 import SwiftUI
 
 final class NavStackHolder {
-    public weak var viewController: UIViewController?
-    
-    public init() {}
+    weak var viewController: UIViewController?
 }
 
 protocol ViewControllable: View {
     var holder: NavStackHolder { get set }
     
     func loadView()
+    func viewDidLoad(_ viewController: UIViewController)
     func viewWillAppear(_ viewController: UIViewController)
+    func viewDidAppear(_ viewController: UIViewController)
     func viewWillDisappear(_ viewController: UIViewController)
 }
 
@@ -29,23 +29,35 @@ extension ViewControllable {
     }
     
     func loadView() {}
+    func viewDidLoad(_ viewController: UIViewController) {}
     func viewWillAppear(_ viewController: UIViewController) {}
+    func viewDidAppear(_ viewController: UIViewController) {}
     func viewWillDisappear(_ viewController: UIViewController) {}
 }
 
 final class HostingController<ContentView>: UIHostingController<ContentView> where ContentView: ViewControllable {
-    public override func loadView() {
+    override func loadView() {
         super.loadView()
-        self.rootView.loadView()
+        rootView.loadView()
     }
     
-    public override func viewWillAppear(_ animated: Bool) {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        rootView.viewDidLoad(self)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.rootView.viewWillAppear(self)
+        rootView.viewWillAppear(self)
     }
     
-    public override func viewWillDisappear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        rootView.viewDidAppear(self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.rootView.viewWillDisappear(self)
+        rootView.viewWillDisappear(self)
     }
 }

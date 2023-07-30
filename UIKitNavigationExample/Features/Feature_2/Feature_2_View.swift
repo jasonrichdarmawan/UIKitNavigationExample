@@ -30,3 +30,9 @@ struct Feature_2_View: ViewControllable {
         }
     }
 }
+
+extension Feature_2_View {
+    func viewDidAppear(_ viewController: UIViewController) {
+        viewController.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+}

@@ -18,18 +18,6 @@ struct Feature_1_View: ViewControllable {
         print("\(type(of: self)) \(#function)")
     }
     
-    func viewWillAppear(_ viewController: UIViewController) {
-        viewController.navigationController?.setNavigationBarHidden(true, animated: false)
-        
-        print("\(type(of: self)) \(#function)")
-    }
-    
-    func viewWillDisappear(_ viewController: UIViewController) {
-        viewController.navigationController?.setNavigationBarHidden(false, animated: false)
-        
-        print("\(type(of: self)) \(#function)")
-    }
-    
     var body: some View {
         VStack {
             Text("Feature 1")
@@ -40,21 +28,34 @@ struct Feature_1_View: ViewControllable {
                 Text("set departure")
             }
             Button {
-                navigateToFeature_1_A()
+                _ = navigateToFeature_1_A()
             } label: {
                 Text("Go to Feature 1 A")
             }
         }    }
-    
-    func navigateToFeature_1_A() {
-        guard let viewController = holder.viewController else { return }
-        let view = Feature_1_A_View(feature_1_ViewModel: feature_1_ViewModel)
-        viewController.navigationController?.pushViewController(view.viewController, animated: true)
+}
+
+extension Feature_1_View {
+    func viewDidAppear(_ viewController: UIViewController) {
+        // enable pop gesture when navigation bar is hidden.
+        viewController.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        viewController.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 }
 
+extension Feature_1_View {
+    func navigateToFeature_1_A() -> Bool {
+        guard let viewController = holder.viewController else { return false }
+        let view = Feature_1_A_View(feature_1_ViewModel: feature_1_ViewModel)
+        viewController.navigationController?.pushViewController(view.viewController, animated: true)
+        return true
+    }
+}
+
+#if DEBUG
 struct Feature_1_View_Previews: PreviewProvider {
     static var previews: some View {
         Feature_1_View()
     }
 }
+#endif
